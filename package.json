@@ -4,6 +4,7 @@
   "description": "\"# brain-strom\"",
   "main": "index.js",
   "scripts": {
+    "start":"node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,14 @@
   "bugs": {
     "url": "https://github.com/Coderdivine/brain-strom/issues"
   },
-  "homepage": "https://github.com/Coderdivine/brain-strom#readme"
+  "homepage": "https://github.com/Coderdivine/brain-strom#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "coingecko-api": "^1.0.10",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.4.6",
+    "nodemon": "^2.0.19",
+    "web3": "^1.7.4"
+  }
 }
