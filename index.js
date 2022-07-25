@@ -51,13 +51,16 @@ async function getBalance(coin,coins){
 async function MakeTradesBNB(change){
     CheckOldPrice().then(async(res)=>{
         let coin = "WBNB"
+        console.log("stage@one")
         const old_price = !res.old_price?0:res.old_price;
         const counts = res.counts;
         const constant = res.constant;
         getCurrentPrice().then(show=>{
+            console.log("stage@two")
             let btc_price = show['bitcoin']['ngn'];
             let bnb_price = show['binancecoin']['ngn'];
             getBalance("BTCB","WBNB").then(async(result)=>{
+                console.log("stage@three")
                 const btc = result.res;
                 const bnb = result.res_one;
                 let btc_main = Number(btc_price) * Number(btc);
@@ -65,13 +68,18 @@ async function MakeTradesBNB(change){
                     const pure_change = btc_main - old_price;
                     if(pure_change <= Number(change)){
                         //make trade
+                        console.log("stage@four")
                         const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct);
                         const txs =  myContract.methods.transfer(address,10);
+                        console.log("stage@five")
                          const gas = await txs.estimateGas({from:address});
+                         console.log("gas"+gas);
                          const gasPrice = await web3.eth.getGasPrice();
-                         const data = await txs.encodeABI();
-                         console.log(await data)
+                         console.log("gasp"+gasPrice);
+                         const data =  txs.encodeABI();
+                         console.log( data)
                          const nonce = await web3.eth.getTransactionCount(address);
+                         console.log(myContract.options.address)
                         const tx = await  web3.eth.accounts.signTransaction({
                             to:myContract.options.address,
                             data,
@@ -79,8 +87,10 @@ async function MakeTradesBNB(change){
                             gasPrice,
                             nonce
                         },privateKey);
-                        console.log(tx.rawTransaction);
+                        console.log("stage@six")
+                        console.log("tx" + tx)
                         const rest =  web3.eth.sendSignedTransaction(tx.rawTransaction);
+                        console.log("stage@seven")
                         return rest.transactionHash;
                     }else{
                         //try again...
