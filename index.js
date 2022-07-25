@@ -35,11 +35,14 @@ async function getCurrentPrice(){
 };
 async function getBalance(coin,coins){
     const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct)//, {gasPrice:5555555,from:caller}
-    const myContract = new web3.eth.Contract(BscContracts[coins][0].abi,BscContracts[coin][0].contarct)//, {gasPrice:5555555,from:caller}
+    const myContracts = new web3.eth.Contract(BscContracts[coins][0].abi,BscContracts[coin][0].contarct)//, {gasPrice:5555555,from:caller}
     try{               
     const res = await myContract.methods.balanceOf(address).call();
-    const res = await myContract.methods.balanceOf(address).call();
-    return res
+    const res_one = await myContracts.methods.balanceOf(address).call();
+    return {
+        res,
+        res_one
+    }
     }catch(error){
     return error.message
      }
@@ -59,6 +62,6 @@ async function MakeTrades(change){
     })
 }
 CheckOldPrice().then(console.log)
-getBalance("USDT").then(console.log)
+getBalance("USDT","WBTC").then(console.log)
 //getCoinId().then(console.log)
 getCurrentPrice().then(console.log)
