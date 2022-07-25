@@ -61,7 +61,7 @@ async function MakeTradesBNB(change){
                 const bnb = result.res_one;
                 let btc_main = Number(btc_price) * Number(btc);
                 let bnb_main = Number(bnb_price) * Number(bnb);
-                const make_trade_bnb = async () =>{
+                
                     const pure_change = btc_main - old_price;
                     if(pure_change >= Number(change)){
                         //make trade
@@ -81,7 +81,6 @@ async function MakeTradesBNB(change){
                     }else{
                         //try again...
                     }
-                }
             });
         })
     })
