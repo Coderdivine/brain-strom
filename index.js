@@ -42,8 +42,10 @@ async function getBalance(coin){
     return error.message
      }
 };
-async function MakeTrades(){
-    
+async function MakeTrades(change){
+    CheckOldPrice().then(res=>{
+        const
+    })
 }
 CheckOldPrice().then(console.log)
 getBalance("USDT").then(console.log)
