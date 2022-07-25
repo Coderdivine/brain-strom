@@ -13,6 +13,10 @@ const brainstrom = new Schema({
     update:{
         type:Date,
         default:Date.now()
+    },
+    constant:{
+        type:Number,
+        required:false
     }
 })
 

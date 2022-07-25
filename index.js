@@ -44,7 +44,8 @@ async function getBalance(coin){
 };
 async function MakeTrades(change){
     CheckOldPrice().then(res=>{
-        const
+        const old_price = res.old_price;
+        const counts = res.counts;
     })
 }
 CheckOldPrice().then(console.log)
