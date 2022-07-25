@@ -48,19 +48,40 @@ async function getBalance(coin,coins){
     return error.message
      }
 };
-async function MakeTrades(change){
+async function MakeTradesBNB(change){
     CheckOldPrice().then(res=>{
         const old_price = res.old_price;
         const counts = res.counts;
         const constant = res.constant;
         getCurrentPrice().then(show=>{
-            let btc_price = show['bitcoin'];
-            let bnb_price = show['binancecoin'];
+            let btc_price = show['bitcoin']['ngn'];
+            let bnb_price = show['binancecoin']['ngn'];
             getBalance("USDT","WBTC").then(result=>{
                 const btc = result.res;
                 const bnb = result.res_one;
-                let btc_main = btc_price * btc;
-                let bnb_main = bnb_price * bnb;
+                let btc_main = Number(btc_price) * Number(btc);
+                let bnb_main = Number(bnb_price) * Number(bnb);
+                const make_trade_bnb = () =>{
+                    const pure_change = btc_main - old_price;
+                    if(pure_change >= Number(change)){
+                        //make trade
+                        const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct);
+                        const txs = myContract.methods.transfer();
+                         const gas = await txs.estimateGas({from:address});
+                         const gasPrice = await web3.eth.getGasPrice();
+                         const data = txs.encodeABI();
+                         const nonce = await web3.eth.getTransactionCount(address);
+                        const tx = await web3.eth.accounts.signTransaction({
+                            to:myContract.options.address,
+                            data,
+                            gas,
+                            gasPrice,
+                            nonce
+                        },privateKey)
+                    }else{
+                        //try again...
+                    }
+                }
             });
         })
     })
