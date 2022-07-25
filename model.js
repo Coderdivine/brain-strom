@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const brainstrom = new Schema({
-    pass:{
-        type:String,
-        required:true
+    old_price:{
+        type:Number,
+        required:true 
     },
-    expires:{
+    counts:{
+        type:Number,
+        required:true 
+    },
+    update:{
         type:Date,
-        default:Date.now() + 3600000
+        default:Date.now()
     }
 })
 
