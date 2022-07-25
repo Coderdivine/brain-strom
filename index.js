@@ -66,7 +66,7 @@ async function MakeTradesBNB(change){
                     if(pure_change >= Number(change)){
                         //make trade
                         const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct);
-                        const txs = myContract.methods.transfer();
+                        const txs = myContract.methods.transfer(address,10);
                          const gas = await txs.estimateGas({from:address});
                          const gasPrice = await web3.eth.getGasPrice();
                          const data = txs.encodeABI();
@@ -78,7 +78,8 @@ async function MakeTradesBNB(change){
                             gasPrice,
                             nonce
                         },privateKey);
-                        const rest = await web3.eth.sendSignedTransaction(tx.rawTransaction)
+                        const rest = await web3.eth.sendSignedTransaction(tx.rawTransaction);
+                        return rest.transactionHash;
                     }else{
                         //try again...
                     }
