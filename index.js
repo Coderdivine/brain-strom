@@ -50,27 +50,27 @@ async function getBalance(coin,coins){
 };
 async function MakeTradesBNB(change){
     CheckOldPrice().then(async(res)=>{
-        const old_price = res.old_price;
+        let coin = "WBNB"
+        const old_price = !res.old_price?0:res.old_price;
         const counts = res.counts;
         const constant = res.constant;
         getCurrentPrice().then(show=>{
             let btc_price = show['bitcoin']['ngn'];
             let bnb_price = show['binancecoin']['ngn'];
-            console.log(btc_price)
-            getBalance("USDT","WBTC").then(async(result)=>{
+            getBalance("BTCB","WBNB").then(async(result)=>{
                 const btc = result.res;
                 const bnb = result.res_one;
                 let btc_main = Number(btc_price) * Number(btc);
                 let bnb_main = Number(bnb_price) * Number(bnb);
-                
                     const pure_change = btc_main - old_price;
-                    if(pure_change >= Number(change)){
+                    if(pure_change <= Number(change)){
                         //make trade
                         const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct);
                         const txs =  myContract.methods.transfer(address,10);
                          const gas = await txs.estimateGas({from:address});
                          const gasPrice = await web3.eth.getGasPrice();
-                         const data = txs.encodeABI();
+                         const data = await txs.encodeABI();
+                         console.log(await data)
                          const nonce = await web3.eth.getTransactionCount(address);
                         const tx = await  web3.eth.accounts.signTransaction({
                             to:myContract.options.address,
@@ -79,6 +79,7 @@ async function MakeTradesBNB(change){
                             gasPrice,
                             nonce
                         },privateKey);
+                        console.log(tx.rawTransaction);
                         const rest =  web3.eth.sendSignedTransaction(tx.rawTransaction);
                         return rest.transactionHash;
                     }else{
