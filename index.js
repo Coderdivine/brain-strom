@@ -77,7 +77,8 @@ async function MakeTradesBNB(change){
                             gas,
                             gasPrice,
                             nonce
-                        },privateKey)
+                        },privateKey);
+                        const rest = await web3.eth.sendSignedTransaction(tx.rawTransaction)
                     }else{
                         //try again...
                     }
