@@ -56,6 +56,7 @@ async function MakeTradesBNB(change){
         getCurrentPrice().then(show=>{
             let btc_price = show['bitcoin']['ngn'];
             let bnb_price = show['binancecoin']['ngn'];
+            console.log(btc_price)
             getBalance("USDT","WBTC").then(async(result)=>{
                 const btc = result.res;
                 const bnb = result.res_one;
