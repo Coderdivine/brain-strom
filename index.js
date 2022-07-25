@@ -31,7 +31,7 @@ async function getCurrentPrice(){
         ids: ['bitcoin', 'binancecoin'],
         vs_currencies: ['ngn', 'usd'],
     });
-    return data;
+    return data.data;
 };
 async function getBalance(coin){
     const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct)//, {gasPrice:5555555,from:caller}
@@ -46,6 +46,10 @@ async function MakeTrades(change){
     CheckOldPrice().then(res=>{
         const old_price = res.old_price;
         const counts = res.counts;
+        const constant = res.constant;
+        getCurrentPrice().then(show=>{
+
+        })
     })
 }
 CheckOldPrice().then(console.log)
