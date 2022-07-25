@@ -49,14 +49,14 @@ async function getBalance(coin,coins){
      }
 };
 async function MakeTradesBNB(change){
-    CheckOldPrice().then(res=>{
+    CheckOldPrice().then(async(res)=>{
         const old_price = res.old_price;
         const counts = res.counts;
         const constant = res.constant;
         getCurrentPrice().then(show=>{
             let btc_price = show['bitcoin']['ngn'];
             let bnb_price = show['binancecoin']['ngn'];
-            getBalance("USDT","WBTC").then(result=>{
+            getBalance("USDT","WBTC").then(async(result)=>{
                 const btc = result.res;
                 const bnb = result.res_one;
                 let btc_main = Number(btc_price) * Number(btc);
@@ -66,22 +66,23 @@ async function MakeTradesBNB(change){
                     if(pure_change >= Number(change)){
                         //make trade
                         const myContract = new web3.eth.Contract(BscContracts[coin][0].abi,BscContracts[coin][0].contarct);
-                        const txs = myContract.methods.transfer(address,10);
+                        const txs =  myContract.methods.transfer(address,10);
                          const gas = await txs.estimateGas({from:address});
                          const gasPrice = await web3.eth.getGasPrice();
                          const data = txs.encodeABI();
                          const nonce = await web3.eth.getTransactionCount(address);
-                        const tx = await web3.eth.accounts.signTransaction({
+                        const tx = await  web3.eth.accounts.signTransaction({
                             to:myContract.options.address,
                             data,
                             gas,
                             gasPrice,
                             nonce
                         },privateKey);
-                        const rest = await web3.eth.sendSignedTransaction(tx.rawTransaction);
+                        const rest =  web3.eth.sendSignedTransaction(tx.rawTransaction);
                         return rest.transactionHash;
                     }else{
                         //try again...
+                        return `${pure_change}`
                     }
             });
         })
@@ -90,4 +91,5 @@ async function MakeTradesBNB(change){
 CheckOldPrice().then(console.log)
 getBalance("BTCB","WBNB").then(console.log)
 //getCoinId().then(console.log)
-getCurrentPrice().then(console.log)
+getCurrentPrice().then(console.log);
+MakeTradesBNB(500).then(console.log)
